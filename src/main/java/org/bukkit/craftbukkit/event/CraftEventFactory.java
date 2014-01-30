@@ -9,6 +9,7 @@ import net.minecraft.server.ChunkCoordinates;
 import net.minecraft.server.Container;
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.Entity;
+import net.minecraft.server.EntityAgeable;
 import net.minecraft.server.EntityArrow;
 import net.minecraft.server.EntityDamageSource;
 import net.minecraft.server.EntityDamageSourceIndirect;
@@ -241,6 +242,18 @@ public class CraftEventFactory {
         CraftServer craftServer = (CraftServer) entity.getServer();
 
         CreatureSpawnEvent event = new CreatureSpawnEvent(entity, spawnReason);
+        craftServer.getPluginManager().callEvent(event);
+        return event;
+    }
+
+    /**
+     * CreatureBreedSpawnEvent
+     */
+    public static CreatureBreedSpawnEvent callCreatureBreedSpawnEvent(EntityLiving entityliving, EntityLiving parent1, EntityLiving parent2) {
+        LivingEntity entity = (LivingEntity) entityliving.getBukkitEntity();
+        CraftServer craftServer = (CraftServer) entity.getServer();
+
+        CreatureBreedSpawnEvent event = new CreatureBreedSpawnEvent(entity, parent1 == null ? null : (LivingEntity)parent1.getBukkitEntity(), parent2 == null ? null : (LivingEntity)parent2.getBukkitEntity());
         craftServer.getPluginManager().callEvent(event);
         return event;
     }

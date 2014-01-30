@@ -872,6 +872,10 @@ public abstract class World implements IBlockAccess {
     }
 
     public boolean addEntity(Entity entity, SpawnReason spawnReason) { // Changed signature, added SpawnReason
+    	return this.addEntity(entity, spawnReason, null, null);
+    }
+    
+    public boolean addEntity(Entity entity, SpawnReason spawnReason, EntityLiving parent1, EntityLiving parent2) { // Changed signature, added SpawnReason, parent1, parent2
         if (entity == null) return false;
         // CraftBukkit end
 
@@ -896,7 +900,10 @@ public abstract class World implements IBlockAccess {
                 }
             }
 
-            event = CraftEventFactory.callCreatureSpawnEvent((EntityLiving) entity, spawnReason);
+            if (spawnReason==SpawnReason.BREEDING) {
+            	event = CraftEventFactory.callCreatureBreedSpawnEvent((EntityLiving) entity, parent1, parent2);
+            } else 
+            	event = CraftEventFactory.callCreatureSpawnEvent((EntityLiving) entity, spawnReason);
         } else if (entity instanceof EntityItem) {
             event = CraftEventFactory.callItemSpawnEvent((EntityItem) entity);
         } else if (entity.getBukkitEntity() instanceof org.bukkit.entity.Projectile) {
